@@ -1,0 +1,3 @@
+[run]
+source = boardealis
+omit = boardealis/test*
