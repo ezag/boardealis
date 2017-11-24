@@ -1,5 +1,10 @@
-boardealis
+Boardealis
 ==========
+.. image:: https://travis-ci.org/ezag/boardealis.svg?branch=master
+    :target: https://travis-ci.org/ezag/boardealis
+
+.. image:: https://codecov.io/gh/ezag/boardealis/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/ezag/boardealis
 
 Getting Started
 ---------------
