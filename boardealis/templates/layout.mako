@@ -1,63 +1,20 @@
-<!DOCTYPE html>
-<html lang="${request.locale_name}">
+<!doctype html>
+<html class="no-js" lang="">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="pyramid web application">
-    <meta name="author" content="Pylons Project">
-    <link rel="shortcut icon" href="${request.static_url('boardealis:static/pyramid-16x16.png')}">
-
-    <title>Cookiecutter Starter project for the Pyramid Web Framework</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="//oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this scaffold -->
-    <link href="${request.static_url('boardealis:static/theme.css')}" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js" integrity="sha384-0s5Pv64cNZJieYFkXYOTId2HMA2Lfb6q2nAcx2n0RTLUnCAoTTsS0nKEO27XyKcY" crossorigin="anonymous"></script>
-      <script src="//oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js" integrity="sha384-f1r2UzjsxZ9T4V1f2zBO/evUqSEOpeaUUZcMTz1Up63bl4ruYnFYeM+BxI4NhyI0" crossorigin="anonymous"></script>
-    <![endif]-->
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Добро пожаловать &middot; Boardealis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" href="${request.static_url('boardealis:static/logo14-16x16.png')}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" href="${request.static_url('boardealis:static/main.css')}">
   </head>
-
   <body>
-
-    <div class="starter-template">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-2">
-            <img class="logo img-responsive" src="${request.static_url('boardealis:static/pyramid.png') }" alt="pyramid web framework">
-          </div>
-          <div class="col-md-10">
-            ${ next.body() }
-          </div>
-        </div>
-        <div class="row">
-          <div class="links">
-            <ul>
-              <li><i class="glyphicon glyphicon-cog icon-muted"></i><a href="https://github.com/Pylons/pyramid">Github Project</a></li>
-              <li><i class="glyphicon glyphicon-globe icon-muted"></i><a href="https://webchat.freenode.net/?channels=pyramid">IRC Channel</a></li>
-              <li><i class="glyphicon glyphicon-home icon-muted"></i><a href="https://pylonsproject.org">Pylons Project</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="row">
-          <div class="copyright">
-            Copyright &copy; Pylons Project
-          </div>
-        </div>
-      </div>
+    <div class="container">
+      ${next.body()}
     </div>
-
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="//oss.maxcdn.com/libs/jquery/1.10.2/jquery.min.js" integrity="sha384-aBL3Lzi6c9LNDGvpHkZrrm3ZVsIwohDD7CDozL0pk8FwCrfmV7H9w8j3L7ikEv6h" crossorigin="anonymous"></script>
-    <script src="//oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js" integrity="sha384-s1ITto93iSMDxlp/79qhWHi+LsIi9Gx6yL+cOKDuymvihkfol83TYbLbOw+W/wv4" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
   </body>
 </html>
-
