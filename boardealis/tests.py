@@ -12,4 +12,5 @@ class TestsFunctional(object):
 
     def test_home(self, app):
         res = app.get('/', status=200)
-        assert b'Boardealis' in res.body
+        assert 'Добро пожаловать' in res.lxml.xpath('//title/text()')[0]
+        assert '/-/login' in res.lxml.xpath('//a/@href')

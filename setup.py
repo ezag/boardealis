@@ -18,6 +18,7 @@ requires = [
 ]
 
 tests_require = [
+    'lxml',
     'WebTest >= 1.3.1',  # py3 compat
     'pytest',
     'pytest-cov',
