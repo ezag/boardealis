@@ -3,8 +3,8 @@
 <img class="logo img-responsive" src="${request.static_url('boardealis:static/logo14.png') }" alt="Boardealis"></img>
 <p class="lead">
 <strong>Boardealis</strong><sup>*</sup> &mdash; это инструмент для тематического группового общения,
-призванный совместить этику <a href="https://indieweb.org/">инди-веб</a> с удобством привычных
-большинству <del>нормальных</del> людей сервисов.
+призванный совместить этику <a href="https://indieweb.org/">инди-веб</a> с удобством сервисов,
+привычных большинству <del>нормальных</del> людей.
 </p>
 <p class="lead">
 Он предназначен для того, чтобы сделать организацию путешествий, планирование выступлений,
