@@ -15,7 +15,7 @@
 <sup>*</sup> <strong>board</strong> (англ. <em>доска</em>, типа объявлений) +
 bor<strong>ealis</strong> (лат. <em>северное</em>, типа сияние)
 <p>
-<a role="button" class="btn btn-lg btn-primary btn-block" href="#">Вход</a>
+<a role="button" class="btn btn-lg btn-primary btn-block" href="${request.route_path('login')}">Вход</a>
 </div>
 
 <div class="row">
