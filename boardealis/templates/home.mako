@@ -112,5 +112,8 @@ bor<strong>ealis</strong> (лат. <em>северное</em>, типа сиян�
 <a href="https://www.linkedin.com/in/e-zag/">LinkedIn</a> и
 <a href="https://www.toptal.com/resume/eugen-zagorodniy#discover-just-candid-software-developers">Toptal</a>.
 <p>
+<p class="lead text-center">
+<em>Пишите письма!</em>
+</p>
 </div>
 </div>
