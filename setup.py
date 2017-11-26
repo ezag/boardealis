@@ -14,6 +14,7 @@ requires = [
     'pyramid',
     'pyramid_mako',
     'pyramid_debugtoolbar',
+    'velruse',
     'waitress',
 ]
 
