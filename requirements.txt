@@ -23,6 +23,7 @@ pyramid-mako==1.0.2
 pytest==3.2.5
 pytest-cov==2.5.1
 python3-openid==3.1.0
+PyYAML==3.12
 repoze.lru==0.7
 requests==2.18.4
 requests-oauthlib==0.8.0
