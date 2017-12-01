@@ -32,3 +32,11 @@ Getting Started
 - Run your project.
 
     env/bin/pserve development.ini
+
+Setup Git Filters
+-----------------
+
+.. code::
+
+    git config filter.secret.smudge 'env/bin/python secret.py smudge'
+    git config filter.secret.clean 'env/bin/python secret.py clean'
