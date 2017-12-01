@@ -11,7 +11,7 @@ def smudge_or_clean(do_smudge):
     for line in sys.stdin:
         line = line.rstrip()
         key = line.split('=', 1)[0].strip() if '=' in line else None
-        print(' = '.join((key, secret[key] if do_smudge else '')).rstrip()
+        print('{} = {}'.format(key, secret[key] if do_smudge else '').rstrip()
               if key in secret else line)
 
 
