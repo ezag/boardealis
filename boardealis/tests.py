@@ -6,9 +6,10 @@ class TestsFunctional(object):
 
     @pytest.fixture
     def app(self):
-        from boardealis import main
+        from pyramid.paster import get_appsettings
         from webtest import TestApp
-        return TestApp(main({}))
+        from boardealis import main
+        return TestApp(main(None, **get_appsettings('testing.ini', name='main')))
 
     def test_home(self, app):
         res = app.get('/', status=200)
