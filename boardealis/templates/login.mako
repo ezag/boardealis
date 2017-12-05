@@ -9,5 +9,5 @@
 <a role="button" class="btn btn-lg btn-secondary" href="#">Twitter</a>
 <a role="button" class="btn btn-lg btn-secondary" href="#">Facebook</a>
 <a role="button" class="btn btn-lg btn-secondary" href="#">VK</a>
-<a role="button" class="btn btn-lg btn-secondary" href="#">GitHub</a>
+<a role="button" class="btn btn-lg btn-secondary" href="${github_url}">GitHub</a>
 </p>
