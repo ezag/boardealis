@@ -40,8 +40,18 @@ def login_redirect(request):
         token = oauth.fetch_token(
             settings['oauth.{}.token_url'.format(provider)],
             code=request.GET['code'],
-            client_secret=settings['oauth.{}.client_secret'.format(provider)])['access_token']
+            client_secret=settings['oauth.{}.client_secret'.format(provider)])
+        profile = oauth.get('https://api.github.com/user').json()
+        emails = oauth.get('https://api.github.com/user/emails').json()
+        result = dict(
+            success=True,
+            token=token['access_token'],
+            name=profile['name'],
+            avatar_url=profile['avatar_url'] + '&s=256',
+            email=[entry['email'] for entry in emails if entry['primary']][0],
+            provider=settings['oauth.{}.title'.format(provider)],
+        )
     except Exception:
         log.exception('Failed to get OAuth token from %s', provider)
-        token = None
-    return dict(token=token)
+        result = dict(success=False)
+    return result
