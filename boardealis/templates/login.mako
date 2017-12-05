@@ -5,10 +5,9 @@
 Где у вас уже есть учётная запись? Выберите, какую использовать для входа:
 </p>
 <p>
-<form action="${login_url(request, 'github')}" method="post">
-    <input class="btn btn-lg btn-secondary" type="submit" value="GitHub" />
-</form>
-<form action="${login_url(request, 'facebook')}" method="post">
-    <input class="btn btn-lg btn-secondary" type="submit" value="Facebook" />
-</form>
+<a role="button" class="btn btn-lg btn-secondary" href="#">Google</a>
+<a role="button" class="btn btn-lg btn-secondary" href="#">Twitter</a>
+<a role="button" class="btn btn-lg btn-secondary" href="#">Facebook</a>
+<a role="button" class="btn btn-lg btn-secondary" href="#">VK</a>
+<a role="button" class="btn btn-lg btn-secondary" href="#">GitHub</a>
 </p>
