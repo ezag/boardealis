@@ -17,6 +17,10 @@ class TestsFunctional(object):
         assert '/-/login/' in res.lxml.xpath('//a/@href')
 
     def test_login(self, app):
+        from urllib.parse import urlparse
         res = app.get('/-/login', status=302)
         res = app.get('/-/login/', status=200)
         assert 'Вход' in res.lxml.xpath('//title/text()')[0]
+        parsed_urls = [urlparse(url) for url in res.lxml.xpath('//a/@href')]
+        assert ('https', 'github.com', '/login/oauth/authorize') in [
+            (url.scheme, url.hostname, url.path) for url in parsed_urls]
