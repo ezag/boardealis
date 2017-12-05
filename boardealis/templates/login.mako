@@ -5,10 +5,8 @@
 Где у вас уже есть учётная запись? Выберите, какую использовать для входа:
 </p>
 <p>
-<a role="button" class="btn btn-lg btn-secondary" href="#">Google</a>
-<a role="button" class="btn btn-lg btn-secondary" href="#">Twitter</a>
-<a role="button" class="btn btn-lg btn-secondary" href="#">Facebook</a>
-<a role="button" class="btn btn-lg btn-secondary" href="#">VK</a>
-<a role="button" class="btn btn-lg btn-secondary" href="${github_url}">GitHub</a>
+%for title, auth_url in auth_links:
+<a role="button" class="btn btn-lg btn-secondary" href="${auth_url}">${title}</a>
+%endfor
 </p>
 </div>

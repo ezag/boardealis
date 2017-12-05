@@ -10,9 +10,13 @@ def home(request):  # pylint:disable=unused-argument
 @view_config(route_name='login', renderer='templates/login.mako')
 def login(request):  # pylint:disable=unused-argument
     settings = request.registry.settings
-    oauth = OAuth2Session(
-        settings['oauth.github.client_id'],
-        redirect_uri=request.route_url('login'),
-        scope=settings['oauth.github.scope'])
-    url, state = oauth.authorization_url(settings['oauth.github.authorization_url'])
-    return dict(github_url=url)
+    auth_links = []
+    for provider in settings['oauth.providers'].split():
+        oauth = OAuth2Session(
+            settings['oauth.{}.client_id'.format(provider)],
+            redirect_uri=request.route_url('login'),
+            scope=settings['oauth.{}.scope'.format(provider)])
+        url, state = oauth.authorization_url(
+            settings['oauth.{}.authorization_url'.format(provider)])
+        auth_links.append((settings['oauth.{}.title'.format(provider)], url))
+    return dict(auth_links=auth_links)
