@@ -1,6 +1,6 @@
 <%inherit file="layout.mako"/>
+<%block name="title">Добро пожаловать &middot; ${parent.title()}</%block>
 <div class="text-center">
-<img class="logo img-responsive" src="${request.static_url('boardealis:static/logo14.png') }" alt="Boardealis"></img>
 <p class="lead">
 <strong>Boardealis</strong><sup>*</sup> &mdash; это инструмент для тематического группового общения,
 призванный совместить этику <a href="https://indieweb.org/">инди-веб</a> с удобством сервисов,
