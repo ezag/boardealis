@@ -15,7 +15,6 @@ requires = [
     'pyramid_mako',
     'pyramid_debugtoolbar',
     'PyYAML',
-    'velruse',
     'waitress',
 ]
 
