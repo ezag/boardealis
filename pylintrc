@@ -1,5 +1,6 @@
 [MASTER]
 init-hook = sys.path.insert(0, './env/lib/python3.6/site-packages')
+good-names = log
 
 [MESSAGES CONTROL]
 disable = missing-docstring
