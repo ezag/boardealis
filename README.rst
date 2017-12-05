@@ -40,3 +40,14 @@ Setup Git Filters
 
     git config filter.secret.smudge 'env/bin/python secret.py smudge'
     git config filter.secret.clean 'env/bin/python secret.py clean'
+
+Reinstall Requirements
+
+.. code::
+
+    rm -rf env &&  \
+    python -m venv env &&  \
+    env/bin/pip install --upgrade pip setuptools &&  \
+    env/bin/pip install -e '.[testing]' &&  \
+    env/bin/pip freeze | sed -e '/boardealis/d' > requirements.txt &&  \
+    env/bin/pip install -r requirements-ipython.txt

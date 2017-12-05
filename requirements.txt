@@ -1,3 +1,4 @@
+attrs==17.3.0
 beautifulsoup4==4.6.0
 coverage==4.4.2
 gitdb2==2.0.3
@@ -9,12 +10,13 @@ MarkupSafe==1.0
 PasteDeploy==1.5.2
 plaster==1.0
 plaster-pastedeploy==0.4.2
+pluggy==0.6.0
 py==1.5.2
 Pygments==2.2.0
 pyramid==1.9.1
 pyramid-debugtoolbar==4.3
 pyramid-mako==1.0.2
-pytest==3.2.5
+pytest==3.3.0
 pytest-cov==2.5.1
 PyYAML==3.12
 repoze.lru==0.7
