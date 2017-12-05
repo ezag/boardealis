@@ -15,6 +15,7 @@ requires = [
     'pyramid_mako',
     'pyramid_debugtoolbar',
     'PyYAML',
+    'requests-oauthlib',
     'waitress',
 ]
 
