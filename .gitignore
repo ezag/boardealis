@@ -21,4 +21,4 @@ coverage
 test
 .cache/
 
-/secret.yaml
+/secret.yml

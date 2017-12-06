@@ -4,8 +4,8 @@ import yaml
 
 def smudge_or_clean(do_smudge):
     try:
-        with open('secret.yaml') as secret_yaml:
-            secret = yaml.safe_load(secret_yaml)
+        with open('secret.yml') as secret_yml:
+            secret = yaml.safe_load(secret_yml)
     except FileNotFoundError:
         secret = {}
     for line in sys.stdin:
