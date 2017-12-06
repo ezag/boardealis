@@ -62,7 +62,9 @@ class TestsFunctional(object):
         assert 'eugen@example.com' in res
         assert 'zagorodniy@example.com' not in res
 
-    @responses.activate
+    def test_login_invalid_provider(self, app):
+        app.get('/-/login/invalid', status=404)
+
     def test_login_via_github_spoof(self, app):
         from urllib.parse import urlencode
         # Abscent state
