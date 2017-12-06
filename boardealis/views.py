@@ -17,6 +17,7 @@ def home(request):  # pylint:disable=unused-argument
 class LoginViews(object):
     def __init__(self, request):
         self.request = request
+        self.oauth_providers = request.registry.settings['oauth.providers'].split()
 
     @view_config(route_name='login', renderer='templates/login.mako')
     def login(self):
@@ -57,10 +58,6 @@ class LoginViews(object):
             scope=self.oauth_param(provider, 'scope'),
             redirect_uri=self.request.route_url('login_redirect', provider=provider),
             state=self.request.session['oauth_state'])
-
-    @property
-    def oauth_providers(self):
-        return self.request.registry.settings['oauth.providers'].split()
 
     @staticmethod
     def profile_from_facebook(oauth):
