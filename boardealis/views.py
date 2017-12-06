@@ -14,60 +14,70 @@ def home(request):  # pylint:disable=unused-argument
     return {}
 
 
-@view_config(route_name='login', renderer='templates/login.mako')
-def login(request):
-    settings = request.registry.settings
-    request.session['oauth_state'] = generate_token()
-    auth_links = []
-    for provider in settings['oauth.providers'].split():
-        oauth = OAuth2Session(
-            settings['oauth.{}.client_id'.format(provider)],
-            state=request.session['oauth_state'],
-            redirect_uri=request.route_url('login_redirect', provider=provider),
-            scope=settings.get('oauth.{}.scope'.format(provider)))
-        url, _state = oauth.authorization_url(
-            settings['oauth.{}.authorization_url'.format(provider)])
-        auth_links.append((settings['oauth.{}.title'.format(provider)], url))
-    return dict(auth_links=auth_links)
+class LoginViews(object):
+    def __init__(self, request):
+        self.request = request
 
+    @view_config(route_name='login', renderer='templates/login.mako')
+    def login(self):
+        state = generate_token()
+        return dict(auth_links=[(
+            self.oauth_param(provider, 'title'),
+            self.oauth_session(provider, state).authorization_url(
+                self.oauth_param(provider, 'authorization_url'))[0]
+        ) for provider in self.oauth_providers])
 
-@view_config(route_name='login_redirect', renderer='templates/login_redirect.mako')
-def login_redirect(request):
-    settings = request.registry.settings
-    provider = request.matchdict['provider']
-    if provider not in settings['oauth.providers'].split():
-        raise HTTPNotFound()
-    if 'oauth_state' not in request.session:
-        raise HTTPBadRequest(MismatchingStateError().description)
-    oauth = OAuth2Session(
-        settings['oauth.{}.client_id'.format(provider)],
-        state=request.session['oauth_state'],
-        redirect_uri=request.route_url('login_redirect', provider=provider))
-    try:
-        oauth.fetch_token(
-            settings['oauth.{}.token_url'.format(provider)],
-            authorization_response=request.url,
-            client_secret=settings['oauth.{}.client_secret'.format(provider)])
-    except MismatchingStateError as exc:
-        raise HTTPBadRequest(exc.description)
-    if provider == 'github':
+    @view_config(route_name='login_redirect', renderer='templates/login_redirect.mako')
+    def login_redirect(self):
+        provider = self.request.matchdict['provider']
+        oauth = self.oauth_session(provider)
+        try:
+            oauth.fetch_token(
+                token_url=self.oauth_param(provider, 'token_url'),
+                authorization_response=self.request.url,
+                client_secret=self.oauth_param(provider, 'client_secret'))
+        except MismatchingStateError as exc:
+            raise HTTPBadRequest(exc.description)
+        result = getattr(self, 'profile_from_{}'.format(provider))(oauth)
+        result.update(dict(success=True, provider=self.oauth_param(provider, 'title')))
+        return result
+
+    def oauth_param(self, provider, param):
+        return self.request.registry.settings['oauth.{}.{}'.format(provider, param)]
+
+    def oauth_session(self, provider, state=None):
+        if provider not in self.oauth_providers:
+            raise HTTPNotFound()
+        if state is not None:
+            self.request.session['oauth_state'] = state
+        elif 'oauth_state' not in self.request.session:
+            raise HTTPBadRequest(MismatchingStateError().description)
+        return OAuth2Session(
+            client_id=self.oauth_param(provider, 'client_id'),
+            scope=self.oauth_param(provider, 'scope'),
+            redirect_uri=self.request.route_url('login_redirect', provider=provider),
+            state=self.request.session['oauth_state'])
+
+    @property
+    def oauth_providers(self):
+        return self.request.registry.settings['oauth.providers'].split()
+
+    @staticmethod
+    def profile_from_facebook(oauth):
+        profile = oauth.get(
+            'https://graph.facebook.com/v2.11/me?fields=id,name,email,picture').json()
+        return dict(
+            name=profile['name'],
+            avatar_url=profile['picture']['data']['url'],
+            email=profile['email'],
+        )
+
+    @staticmethod
+    def profile_from_github(oauth):
         profile = oauth.get('https://api.github.com/user').json()
         emails = oauth.get('https://api.github.com/user/emails').json()
-        result = dict(
-            success=True,
+        return dict(
             name=profile['name'],
             avatar_url=profile['avatar_url'] + '&s=256',
             email=[entry['email'] for entry in emails if entry['primary']][0],
-            provider=settings['oauth.{}.title'.format(provider)],
         )
-    elif provider == 'facebook':
-        profile = oauth.get(
-            'https://graph.facebook.com/v2.11/me?fields=id,name,email,picture').json()
-        result = dict(
-            success=True,
-            name=profile['name'],
-            avatar_url=profile['picture']['data']['url'],
-            email=profile.get('email', 'NO EMAIL'),
-            provider=settings['oauth.{}.title'.format(provider)],
-        )
-    return result
