@@ -2,6 +2,7 @@ attrs==17.3.0
 beautifulsoup4==4.6.0
 certifi==2017.11.5
 chardet==3.0.4
+cookies==2.2.1
 coverage==4.4.2
 gitdb2==2.0.3
 GitPython==2.1.7
@@ -26,6 +27,7 @@ PyYAML==3.12
 repoze.lru==0.7
 requests==2.18.4
 requests-oauthlib==0.8.0
+responses==0.8.1
 six==1.11.0
 smmap2==2.0.3
 translationstring==1.3

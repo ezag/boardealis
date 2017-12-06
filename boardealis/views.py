@@ -6,6 +6,7 @@ from requests_oauthlib import OAuth2Session
 
 log = logging.getLogger(__name__)
 
+
 @view_config(route_name='home', renderer='templates/home.mako')
 def home(request):  # pylint:disable=unused-argument
     return {}
