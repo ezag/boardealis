@@ -1,3 +1,5 @@
 [run]
 source = boardealis
-omit = boardealis/test* secret.py
+omit =
+    boardealis/test*
+    secret.py
