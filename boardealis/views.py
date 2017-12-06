@@ -18,35 +18,39 @@ class LoginViews(object):
     def __init__(self, request):
         self.request = request
         self.oauth_providers = request.registry.settings['oauth.providers'].split()
+        self.provider = self.request.matchdict.get('provider')
 
     @view_config(route_name='login', renderer='templates/login.mako')
     def login(self):
         state = generate_token()
         return dict(auth_links=[(
-            self.oauth_param(provider, 'title'),
+            self.oauth_param('title', provider),
             self.oauth_session(provider, state).authorization_url(
-                self.oauth_param(provider, 'authorization_url'))[0]
+                self.oauth_param('authorization_url', provider))[0]
         ) for provider in self.oauth_providers])
 
     @view_config(route_name='login_redirect', renderer='templates/login_redirect.mako')
     def login_redirect(self):
-        provider = self.request.matchdict['provider']
-        oauth = self.oauth_session(provider)
+        oauth = self.oauth_session()
         try:
             oauth.fetch_token(
-                token_url=self.oauth_param(provider, 'token_url'),
+                token_url=self.oauth_param('token_url'),
                 authorization_response=self.request.url,
-                client_secret=self.oauth_param(provider, 'client_secret'))
+                client_secret=self.oauth_param('client_secret'))
         except MismatchingStateError as exc:
             raise HTTPBadRequest(exc.description)
-        result = getattr(self, 'profile_from_{}'.format(provider))(oauth)
-        result.update(dict(success=True, provider=self.oauth_param(provider, 'title')))
+        result = getattr(self, 'profile_from_{}'.format(self.provider))(oauth)
+        result.update(dict(success=True, provider=self.oauth_param('title')))
         return result
 
-    def oauth_param(self, provider, param):
+    def oauth_param(self, param, provider=None):
+        provider = provider or self.provider
+        assert provider is not None
         return self.request.registry.settings['oauth.{}.{}'.format(provider, param)]
 
-    def oauth_session(self, provider, state=None):
+    def oauth_session(self, provider=None, state=None):
+        provider = provider or self.provider
+        assert provider is not None
         if provider not in self.oauth_providers:
             raise HTTPNotFound()
         if state is not None:
@@ -54,8 +58,8 @@ class LoginViews(object):
         elif 'oauth_state' not in self.request.session:
             raise HTTPBadRequest(MismatchingStateError().description)
         return OAuth2Session(
-            client_id=self.oauth_param(provider, 'client_id'),
-            scope=self.oauth_param(provider, 'scope'),
+            client_id=self.oauth_param('client_id', provider),
+            scope=self.oauth_param('scope', provider),
             redirect_uri=self.request.route_url('login_redirect', provider=provider),
             state=self.request.session['oauth_state'])
 
