@@ -61,3 +61,14 @@ class TestsFunctional(object):
         assert 'Eugen Zagorodniy' in res
         assert 'eugen@example.com' in res
         assert 'zagorodniy@example.com' not in res
+
+    @responses.activate
+    def test_login_via_github_spoof(self, app):
+        from urllib.parse import urlencode
+        # Abscent state
+        app.get('/-/login/github?{}'.format(urlencode(dict(
+            code='TEST_CODE', state='SPOOFED_STATE'))), status=400)
+        # Mismatching state
+        app.get('/-/login/', status=200)
+        app.get('/-/login/github?{}'.format(urlencode(dict(
+            code='TEST_CODE', state='SPOOFED_STATE'))), status=400)
