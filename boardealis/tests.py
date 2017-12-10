@@ -26,13 +26,22 @@ class TestsFunctional(object):
         assert ('https', 'github.com', '/login/oauth/authorize') in [
             (url.scheme, url.hostname, url.path) for url in parsed_urls]
 
-    @responses.activate
-    def test_login_via_github_accept(self, app):
+    def do_login_accept(self, app, provider):
         from urllib.parse import parse_qs, urlencode, urlparse
         res = app.get('/-/login/', status=200)
         state = parse_qs(urlparse(
-            res.lxml.xpath('//a[text()="GitHub"]/@href')[0]
+            res.lxml.xpath('//a[text()="{}"]/@href'.format(provider))[0]
         ).query)['state'][0]
+        res = app.get('/-/login/{}?{}'.format(
+            provider.lower(),
+            urlencode(dict(code='TEST_CODE', state=state))
+        ), status=200)
+        assert 'Здравствуй' in res
+        assert 'Eugen Zagorodniy' in res
+        assert 'eugen@example.com' in res
+
+    @responses.activate
+    def test_login_via_github_accept(self, app):
         responses.add(
             responses.POST, 'https://github.com/login/oauth/access_token',
             status=200, json={'access_token': 'FAKE_ACCESS_TOKEN'})
@@ -55,19 +64,10 @@ class TestsFunctional(object):
                 'verified': True,
                 'visibility': None,
             }])
-        res = app.get('/-/login/github?{}'.format(urlencode(dict(
-            code='TEST_CODE', state=state))), status=200)
-        assert 'Здравствуй' in res
-        assert 'Eugen Zagorodniy' in res
-        assert 'eugen@example.com' in res
+        self.do_login_accept(app, 'GitHub')
 
     @responses.activate
     def test_login_via_facebook_accept(self, app):
-        from urllib.parse import parse_qs, urlencode, urlparse
-        res = app.get('/-/login/', status=200)
-        state = parse_qs(urlparse(
-            res.lxml.xpath('//a[text()="Facebook"]/@href')[0]
-        ).query)['state'][0]
         responses.add(
             responses.POST, 'https://graph.facebook.com/v2.11/oauth/access_token',
             status=200, json={'access_token': 'FAKE_ACCESS_TOKEN'})
@@ -85,11 +85,7 @@ class TestsFunctional(object):
                     }
                 }
             })
-        res = app.get('/-/login/facebook?{}'.format(urlencode(dict(
-            code='TEST_CODE', state=state))), status=200)
-        assert 'Здравствуй' in res
-        assert 'Eugen Zagorodniy' in res
-        assert 'eugen@example.com' in res
+        self.do_login_accept(app, 'Facebook')
 
     def test_login_invalid_provider(self, app):
         app.get('/-/login/invalid', status=404)
