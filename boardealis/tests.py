@@ -60,7 +60,36 @@ class TestsFunctional(object):
         assert 'Здравствуй' in res
         assert 'Eugen Zagorodniy' in res
         assert 'eugen@example.com' in res
-        assert 'zagorodniy@example.com' not in res
+
+    @responses.activate
+    def test_login_via_facebook_accept(self, app):
+        from urllib.parse import parse_qs, urlencode, urlparse
+        res = app.get('/-/login/', status=200)
+        state = parse_qs(urlparse(
+            res.lxml.xpath('//a[text()="Facebook"]/@href')[0]
+        ).query)['state'][0]
+        responses.add(
+            responses.POST, 'https://graph.facebook.com/v2.11/oauth/access_token',
+            status=200, json={'access_token': 'FAKE_ACCESS_TOKEN'})
+        responses.add(
+            responses.GET, 'https://graph.facebook.com/v2.11/me?fields=id,name,email,picture',
+            status=200, json={
+                'id': '271614080033749',
+                'name': 'Eugen Zagorodniy',
+                'email': 'eugen@example.com',
+                'picture': {
+                    'data': {
+                        'url': 'https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/'
+                               '23472236_262397077622116_7049467528256741469_n.jpg?'
+                               'oh=c01240ff77a895818bc3fd80611d84ed&oe=5ACBA9B9',
+                    }
+                }
+            })
+        res = app.get('/-/login/facebook?{}'.format(urlencode(dict(
+            code='TEST_CODE', state=state))), status=200)
+        assert 'Здравствуй' in res
+        assert 'Eugen Zagorodniy' in res
+        assert 'eugen@example.com' in res
 
     def test_login_invalid_provider(self, app):
         app.get('/-/login/invalid', status=404)

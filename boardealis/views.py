@@ -1,3 +1,4 @@
+import json
 import logging
 
 from oauthlib.common import generate_token
@@ -65,8 +66,9 @@ class LoginViews(object):
 
     @staticmethod
     def profile_from_facebook(oauth):
-        profile = oauth.get(
-            'https://graph.facebook.com/v2.11/me?fields=id,name,email,picture').json()
+        url = 'https://graph.facebook.com/v2.11/me?fields=id,name,email,picture'
+        profile = oauth.get(url).json()
+        log.debug('GET %s %s', url, json.dumps(profile, indent=2, ensure_ascii=False))
         return dict(
             name=profile['name'],
             avatar_url=profile['picture']['data']['url'],
