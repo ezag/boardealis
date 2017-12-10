@@ -33,9 +33,10 @@ class LoginViews(object):
     @view_config(route_name='login_redirect', renderer='templates/login_redirect.mako')
     def login_redirect(self):
         oauth = self.oauth_session()
+        token_url = self.oauth_param('token_url')
         try:
             oauth.fetch_token(
-                token_url=self.oauth_param('token_url'),
+                token_url=token_url,
                 authorization_response=self.request.url,
                 client_secret=self.oauth_param('client_secret'))
         except MismatchingStateError as exc:
@@ -99,3 +100,7 @@ class LoginViews(object):
             avatar_url=profile['picture'] + '?sz=256',
             email=profile['email'],
         )
+
+    @classmethod
+    def profile_from_vk(cls, oauth):  # pylint: disable=unused-argument
+        return dict()

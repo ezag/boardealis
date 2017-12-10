@@ -103,6 +103,20 @@ class TestsFunctional(object):
             })
         self.do_login_accept(app, 'Google')
 
+    @pytest.mark.xfail
+    # requests.exceptions.ConnectionError:
+    # HTTPSConnectionPool(host='oauth.vk.com', port=443):
+    # Max retries exceeded with url: /access_token
+    # (Caused by NewConnectionError(
+    # '<urllib3.connection.VerifiedHTTPSConnection object at 0x7f0be5f40080>:
+    # Failed to establish a new connection: [Errno 111] Connection refused',))
+    @responses.activate
+    def test_login_via_vk_accept(self, app):
+        responses.add(
+            responses.POST, 'https://oauth.vk.com/access_token',
+            status=200, json={'access_token': 'FAKE_ACCESS_TOKEN'})
+        self.do_login_accept(app, 'VK')
+
     def test_login_invalid_provider(self, app):
         app.get('/-/login/invalid', status=404)
 
