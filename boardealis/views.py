@@ -65,22 +65,37 @@ class LoginViews(object):
             state=self.request.session['oauth_state'])
 
     @staticmethod
-    def profile_from_facebook(oauth):
-        url = 'https://graph.facebook.com/v2.11/me?fields=id,name,email,picture'
-        profile = oauth.get(url).json()
-        log.debug('GET %s %s', url, json.dumps(profile, indent=2, ensure_ascii=False))
+    def get_and_log(oauth, url):
+        res = oauth.get(url).json()
+        log.debug('GET %s %s', url, json.dumps(res, indent=2, ensure_ascii=False))
+        return res
+
+    @classmethod
+    def profile_from_facebook(cls, oauth):
+        profile = cls.get_and_log(
+            oauth,
+            'https://graph.facebook.com/v2.11/me?fields=id,name,email,picture')
         return dict(
             name=profile['name'],
             avatar_url=profile['picture']['data']['url'],
             email=profile['email'],
         )
 
-    @staticmethod
-    def profile_from_github(oauth):
-        profile = oauth.get('https://api.github.com/user').json()
-        emails = oauth.get('https://api.github.com/user/emails').json()
+    @classmethod
+    def profile_from_github(cls, oauth):
+        profile = cls.get_and_log(oauth, 'https://api.github.com/user')
+        emails = cls.get_and_log(oauth, 'https://api.github.com/user/emails')
         return dict(
             name=profile['name'],
             avatar_url=profile['avatar_url'] + '&s=256',
             email=[entry['email'] for entry in emails if entry['primary']][0],
+        )
+
+    @classmethod
+    def profile_from_google(cls, oauth):
+        profile = cls.get_and_log(oauth, 'https://www.googleapis.com/oauth2/v3/userinfo')
+        return dict(
+            name=profile['name'],
+            avatar_url=profile['picture'] + '?sz=256',
+            email=profile['email'],
         )

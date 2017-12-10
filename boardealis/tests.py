@@ -41,6 +41,27 @@ class TestsFunctional(object):
         assert 'eugen@example.com' in res
 
     @responses.activate
+    def test_login_via_facebook_accept(self, app):
+        responses.add(
+            responses.POST, 'https://graph.facebook.com/v2.11/oauth/access_token',
+            status=200, json={'access_token': 'FAKE_ACCESS_TOKEN'})
+        responses.add(
+            responses.GET, 'https://graph.facebook.com/v2.11/me?fields=id,name,email,picture',
+            status=200, json={
+                'id': '271614080033749',
+                'name': 'Eugen Zagorodniy',
+                'email': 'eugen@example.com',
+                'picture': {
+                    'data': {
+                        'url': 'https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/'
+                               '23472236_262397077622116_7049467528256741469_n.jpg?'
+                               'oh=c01240ff77a895818bc3fd80611d84ed&oe=5ACBA9B9',
+                    }
+                }
+            })
+        self.do_login_accept(app, 'Facebook')
+
+    @responses.activate
     def test_login_via_github_accept(self, app):
         responses.add(
             responses.POST, 'https://github.com/login/oauth/access_token',
@@ -67,25 +88,20 @@ class TestsFunctional(object):
         self.do_login_accept(app, 'GitHub')
 
     @responses.activate
-    def test_login_via_facebook_accept(self, app):
+    def test_login_via_google_accept(self, app):
         responses.add(
-            responses.POST, 'https://graph.facebook.com/v2.11/oauth/access_token',
+            responses.POST, 'https://www.googleapis.com/oauth2/v4/token',
             status=200, json={'access_token': 'FAKE_ACCESS_TOKEN'})
         responses.add(
-            responses.GET, 'https://graph.facebook.com/v2.11/me?fields=id,name,email,picture',
+            responses.GET, 'https://www.googleapis.com/oauth2/v3/userinfo',
             status=200, json={
-                'id': '271614080033749',
+                'sub': '102533519110366328367',
                 'name': 'Eugen Zagorodniy',
+                'picture': 'https://lh4.googleusercontent.com/'
+                           '-Tzga_08tKs4/AAAAAAAAAAI/AAAAAAAAAHU/-NbRdil7Byc/photo.jpg',
                 'email': 'eugen@example.com',
-                'picture': {
-                    'data': {
-                        'url': 'https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/'
-                               '23472236_262397077622116_7049467528256741469_n.jpg?'
-                               'oh=c01240ff77a895818bc3fd80611d84ed&oe=5ACBA9B9',
-                    }
-                }
             })
-        self.do_login_accept(app, 'Facebook')
+        self.do_login_accept(app, 'Google')
 
     def test_login_invalid_provider(self, app):
         app.get('/-/login/invalid', status=404)
