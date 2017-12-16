@@ -1,6 +1,7 @@
 import os
 
 from setuptools import setup, find_packages
+import versioneer
 
 here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, 'README.rst')) as f:
@@ -28,7 +29,8 @@ tests_require = [
 
 setup(
     name='boardealis',
-    version='0.0',
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     description='boardealis',
     long_description=README,
     classifiers=[
