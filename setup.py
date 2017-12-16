@@ -14,6 +14,7 @@ requires = [
     'pyramid_debugtoolbar',
     'PyYAML',
     'requests-oauthlib',
+    'requests[socks]',
     'waitress',
 ]
 

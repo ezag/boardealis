@@ -38,7 +38,8 @@ class LoginViews(object):
             oauth.fetch_token(
                 token_url=token_url,
                 authorization_response=self.request.url,
-                client_secret=self.oauth_param('client_secret'))
+                client_secret=self.oauth_param('client_secret'),
+                proxies=self.oauth_proxies())
         except MismatchingStateError as exc:
             raise HTTPBadRequest(exc.description)
         result = getattr(self, 'profile_from_{}'.format(self.provider))(oauth)
@@ -49,6 +50,13 @@ class LoginViews(object):
         provider = provider or self.provider
         assert provider is not None
         return self.request.registry.settings['oauth.{}.{}'.format(provider, param)]
+
+    def oauth_proxies(self):
+        try:
+            proxy = self.oauth_param('proxy')
+        except KeyError:
+            return {}
+        return dict(https=proxy)
 
     def oauth_session(self, provider=None, state=None):
         provider = provider or self.provider

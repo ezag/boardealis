@@ -5,7 +5,7 @@ chardet==3.0.4
 cookies==2.2.1
 coverage==4.4.2
 gitdb2==2.0.3
-GitPython==2.1.7
+GitPython==2.1.8
 hupper==1.0
 idna==2.6
 lxml==4.1.1
@@ -21,7 +21,8 @@ Pygments==2.2.0
 pyramid==1.9.1
 pyramid-debugtoolbar==4.3
 pyramid-mako==1.0.2
-pytest==3.3.0
+PySocks==1.6.7
+pytest==3.3.1
 pytest-cov==2.5.1
 PyYAML==3.12
 repoze.lru==0.7
